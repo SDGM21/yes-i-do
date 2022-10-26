@@ -1,7 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Main from "./components/Main";
 import { Routes, Route } from "react-router-dom";
 import useFirebase from "./hooks/useFirebase";
 import { authReducer } from "./reducers/authReducer";
@@ -14,11 +13,9 @@ const App = () => {
 
   const [state, dispatch] = useReducer(authReducer, null);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) =>
-      user ? dispatch({ type: "Login", payload: user }) : null
-    );
-  }, []);
+  onAuthStateChanged(auth, (user) =>
+    dispatch({ type: "Login", payload: user })
+  );
 
   return (
     <>

@@ -1,7 +1,7 @@
 const Main = ({ children }: { children: any }) => {
   return (
     <>
-      <div className="valing-wrapper">{children}</div>
+      <div className="valing-wrapper container">{children}</div>
     </>
   );
 };

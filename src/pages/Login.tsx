@@ -1,50 +1,77 @@
 import Main from "../components/Main";
 import LoginButton from "../components/LoginButton";
 import gitHubLogo from "../assets/211904_social_github_icon.svg";
-import googleLogo from "../assets/7123025_logo_google_g_icon.svg"
-import { Link } from "react-router-dom";
+import googleLogo from "../assets/7123025_logo_google_g_icon.svg";
+import anonimLogo from "../assets/3994434_address_at_contact_email_icon.svg";
+import emailPassLogo from "../assets/9024815_password_light_icon.svg";
+import { useEffect, useReducer, useState } from "react";
+import FormModal from "../modals/FormModal";
+import useFirebase from "../hooks/useFirebase";
+
 const Login = () => {
   const handleLogin = () => {};
-
   const handleChange = () => {};
+
+  const {
+    signInWithEmailLink,
+    signInAnonymously,
+    GithubProvider,
+    GoogleProvider,
+  } = useFirebase();
+
+  const [open, setOpen] = useState(false);
+
+  const [state, setState] = useState<string>("");
+
+  useEffect(() => {
+    if (state === "Email") {
+      setOpen(true);
+    }
+  }, [state]);
+
   return (
     <Main>
       <div className="row container">
-        <div className="row col s7">
-          <form onSubmit={handleLogin} className="container col s12">
-            <div className="row">
-              <div className="input-field col s12">
-                <i className="material-icons prefix">email</i>
-                <label htmlFor="icon_prefix">Email</label>
-                <input
-                  onChange={handleChange}
-                  id="icon_prefix"
-                  name="email"
-                  type="text"
-                  className="validate"
-                />
-              </div>
-              <div className="input-field col s12">
-                <i className="material-icons prefix">vpn_key</i>
-                <label htmlFor="icon_password_prefix">Password</label>
-                <input
-                  onChange={handleChange}
-                  id="icon_password_prefix"
-                  name="password"
-                  type="password"
-                  className="validate"
-                />
-              </div>
-            </div>
-
-            <Link to={"/register"}>Register new user</Link>
-          </form>
-        </div>
-        <div className="row col s5">
-          <LoginButton logo={gitHubLogo} provider={""}/>
-          <LoginButton logo={googleLogo} provider={""}/>
-          <LoginButton logo={gitHubLogo} provider={""}/>
-          <LoginButton logo={googleLogo} provider={""}/>
+        <h2 className="flow-text center">
+          Seleccione un metodo de Inicio de Sesion
+        </h2>
+        <FormModal
+          open={open}
+          close={() => {
+            setOpen(false);
+            setState("");
+          }}
+        />
+        <div className="row container">
+          <div className="row col s12">
+            <LoginButton
+              logo={anonimLogo}
+              cardTitle={"Anonimo"}
+              stateSetter={setState}
+              isOpen={open}
+            />
+            <LoginButton
+              logo={emailPassLogo}
+              cardTitle={"Email"}
+              stateSetter={setState}
+              isOpen={open}
+            />
+            <LoginButton
+              logo={gitHubLogo}
+              alt={"Github Logo"}
+              cardTitle={"Github"}
+              stateSetter={setState}
+              isOpen={open}
+              provider={GithubProvider}
+            />
+            <LoginButton
+              logo={googleLogo}
+              cardTitle={"Google"}
+              stateSetter={setState}
+              isOpen={open}
+              provider={GoogleProvider}
+            />
+          </div>
         </div>
       </div>
     </Main>

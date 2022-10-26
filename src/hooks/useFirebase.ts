@@ -3,9 +3,12 @@ import { initializeApp } from "firebase/app";
 import {
   signInWithPopup,
   signInWithEmailLink,
+  signInAnonymously,
+  signOut,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  GithubAuthProvider,
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
@@ -30,6 +33,7 @@ const useFirebase = () => {
   const db = getFirestore(app);
   const storage = getStorage(app);
   const GoogleProvider = new GoogleAuthProvider();
+  const GithubProvider = new GithubAuthProvider();
 
  
   return {
@@ -38,9 +42,11 @@ const useFirebase = () => {
     db,
     storage,
     GoogleProvider,
+    GithubProvider,
     signInWithEmailLink,
-    signInWithPopup,
+    signInWithPopup, signInAnonymously,
     onAuthStateChanged,
+    signOut
   };
 };
 

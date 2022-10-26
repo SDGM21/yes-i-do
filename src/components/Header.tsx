@@ -19,10 +19,10 @@ const Header = () => {
 
   const handleClick = async (e: any) => {
     const myRef2 = collection(db, "rooms");
-    const data = await getDocs(myRef2)
+    const data = await getDocs(myRef2);
     data.forEach((doc) => {
-      console.log(doc.data())
-    })
+      console.log(doc.data());
+    });
     // const data = { roomName: 1, roomUserCreator: 2, roomDescription: 4 };
 
     // await addDoc(myRef2, data);
@@ -31,13 +31,21 @@ const Header = () => {
   return (
     <>
       <nav>
-        <div>
-          <button
-            onClick={handleClick}
-            className={"waves-effect waves-light btn"}
-          >
-            <img src={logoTest} alt="Y.I.S. logo" />
-          </button>
+        <div className="black nav-wrapper">
+          <a href="#" className="brand-logo">
+            Logo
+          </a>
+          <ul id="nav-mobile" className="right hide-on-med-and-down">
+            <li>
+              <a href="sass.html">Sass</a>
+            </li>
+            <li>
+              <a href="badges.html">Components</a>
+            </li>
+            <li>
+              <a href="collapsible.html">JavaScript</a>
+            </li>
+          </ul>
         </div>
       </nav>
     </>
