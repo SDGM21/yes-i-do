@@ -1,12 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { authContext } from "../context/AuthProvider";
+import useFirebase from "../hooks/useFirebase";
 
 const Register = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
-    username: "",
   });
+
+  const { dispatch } = useContext(authContext);
+  const navigate = useNavigate();
+  const { createUserWithEmailAndPassword, auth } = useFirebase();
 
   const handleChange = (e: any) => {
     let values: string = e.target.value;
@@ -21,13 +26,10 @@ const Register = () => {
     });
   };
 
-  const handleRegister = (e:any) => {
+  const handleRegister = (e: any) => {
     e.preventDefault();
 
     if (data.email.trim() === "" || !data.email.includes("@")) {
-      return;
-    } else if (data.username.length < 6 || data.username.trim() === "") {
-      console.error("INVALID_USERNAME");
       return;
     } else if (data.password.length < 6) {
       console.error("Password need at least 6 characters");
@@ -39,7 +41,12 @@ const Register = () => {
       console.error("Password Don't Match");
       return;
     } else {
-      return;
+      createUserWithEmailAndPassword(auth, data.email, data.password).then(
+        (user) => {
+          dispatch({ type: "Login", payload: user });
+          navigate("/rooms");
+        }
+      );
     }
   };
 
@@ -60,18 +67,6 @@ const Register = () => {
                   name={"email"}
                   id="icon_prefix"
                   type="email"
-                  className="validate"
-                />
-              </div>
-
-              <div className="input-field col s12">
-                <i className="material-icons prefix">person</i>
-                <label htmlFor="icon_username_prefix">Username</label>
-                <input
-                  onChange={handleChange}
-                  name={"username"}
-                  id="icon_username_prefix"
-                  type="text"
                   className="validate"
                 />
               </div>

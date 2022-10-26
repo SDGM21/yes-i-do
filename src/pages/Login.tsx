@@ -9,15 +9,7 @@ import FormModal from "../modals/FormModal";
 import useFirebase from "../hooks/useFirebase";
 
 const Login = () => {
-  const handleLogin = () => {};
-  const handleChange = () => {};
-
-  const {
-    signInWithEmailLink,
-    signInAnonymously,
-    GithubProvider,
-    GoogleProvider,
-  } = useFirebase();
+  const { GithubProvider, GoogleProvider } = useFirebase();
 
   const [open, setOpen] = useState(false);
 

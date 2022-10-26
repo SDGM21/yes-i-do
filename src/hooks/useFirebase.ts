@@ -3,7 +3,9 @@ import { initializeApp } from "firebase/app";
 import {
   signInWithPopup,
   signInWithEmailLink,
+  signInWithEmailAndPassword,
   signInAnonymously,
+  createUserWithEmailAndPassword,
   signOut,
   getAuth,
   GoogleAuthProvider,
@@ -27,7 +29,6 @@ const firebaseConfig = {
 
 //Firebase Common Hook
 const useFirebase = () => {
-  
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -35,18 +36,20 @@ const useFirebase = () => {
   const GoogleProvider = new GoogleAuthProvider();
   const GithubProvider = new GithubAuthProvider();
 
- 
   return {
     app,
     auth,
+    createUserWithEmailAndPassword,
     db,
-    storage,
-    GoogleProvider,
     GithubProvider,
-    signInWithEmailLink,
-    signInWithPopup, signInAnonymously,
+    GoogleProvider,
     onAuthStateChanged,
-    signOut
+    signInWithEmailLink,
+    signInWithPopup,
+    signInAnonymously,
+    signInWithEmailAndPassword,
+    signOut,
+    storage,
   };
 };
 
