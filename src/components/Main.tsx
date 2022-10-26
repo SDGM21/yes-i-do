@@ -1,11 +1,9 @@
-import UserCards from "./UserCards";
-const Main = (props:any) => {
-    return ( <>
-    <div>
-        <div>
-            <UserCards {...props}/>
-        </div>
-        </div></> );
-}
- 
+const Main = ({ children }: { children: any }) => {
+  return (
+    <>
+      <div className="valing-wrapper">{children}</div>
+    </>
+  );
+};
+
 export default Main;

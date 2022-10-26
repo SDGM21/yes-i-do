@@ -5,6 +5,7 @@ import {
   signInWithEmailLink,
   getAuth,
   GoogleAuthProvider,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
@@ -23,18 +24,23 @@ const firebaseConfig = {
 
 //Firebase Common Hook
 const useFirebase = () => {
+  
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
   const GoogleProvider = new GoogleAuthProvider();
 
+ 
   return {
     app,
     auth,
     db,
     storage,
     GoogleProvider,
+    signInWithEmailLink,
+    signInWithPopup,
+    onAuthStateChanged,
   };
 };
 
