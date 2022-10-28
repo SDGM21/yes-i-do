@@ -1,9 +1,10 @@
-import { createContext, Dispatch, ReactNode } from "react";
+import { createContext, Dispatch } from "react";
+import { authContextType } from "../types/authContextType";
 
 const authContext = createContext<{
   state: any;
-  dispatch: Dispatch<{ type: "Login" | "Logout"; payload: any }> | (() => {});
-}>({ state: null, dispatch: () => {} });
+  dispatch: Dispatch<authContextType> | (() => {});
+}>({ state: null, dispatch: () => { } });
 
 const AuthProvider = ({
   state,

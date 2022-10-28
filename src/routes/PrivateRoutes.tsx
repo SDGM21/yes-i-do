@@ -4,8 +4,6 @@ import Redirect from "../components/Redirect";
 import Room from "../pages/Room";
 
 const PrivateRoutes = () => {
-  const navigate = useNavigate();
-
   return (
     <Routes>
       <Route path="/*" element={<Redirect redirect="/rooms" />} />
