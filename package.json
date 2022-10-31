@@ -2,7 +2,7 @@
   "name": "yes-i-do",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "proxy": "http://localhost:3001/api",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

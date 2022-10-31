@@ -28,6 +28,7 @@ export default function FormModal({ open, close }: { open: any; close: any }) {
       );
     }
   };
+
   if (!open) {
     return null;
   } else {
@@ -43,6 +44,7 @@ export default function FormModal({ open, close }: { open: any; close: any }) {
             backgroundColor: "rgba(0,0,0,.7)",
             zIndex: 1000,
           }}
+          onClick={close}
         />
         <div
           style={{
