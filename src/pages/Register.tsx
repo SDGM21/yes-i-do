@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Error from "../components/Error";
 import { authContext } from "../context/AuthProvider";
 import useFirebase from "../hooks/useFirebase";
 
@@ -9,6 +10,14 @@ const Register = () => {
     password: "",
   });
 
+  const [error, setError] = useState({
+    state: false,
+    errorType: "",
+    component(err_Type: string): JSX.Element {
+      return <Error error={err_Type} />;
+    },
+  });
+
   const { dispatch } = useContext(authContext);
   const navigate = useNavigate();
   const { createUserWithEmailAndPassword, auth } = useFirebase();
@@ -16,9 +25,9 @@ const Register = () => {
   const handleChange = (e: any) => {
     let values: string = e.target.value;
 
-    if (e.target.name === "username") {
-      values = values.replaceAll(" ", "_");
-    }
+    // if (e.target.name === "username") {
+    //   values = values.replaceAll(" ", "_");
+    // }
 
     setData({
       ...data,
@@ -29,34 +38,40 @@ const Register = () => {
   const handleRegister = (e: any) => {
     e.preventDefault();
 
-    if (data.email.trim() === "" || !data.email.includes("@")) {
-      return;
-    } else if (data.password.length < 6) {
-      console.error("Password need at least 6 characters");
-      return;
-    } else if (
-      data.password !==
-      document.getElementById("icon_confirmPassword_prefix")?.value.toString()
-    ) {
-      console.error("Password Don't Match");
-      return;
-    } else {
-      createUserWithEmailAndPassword(auth, data.email, data.password).then(
-        (user) => {
-          dispatch({ type: "Login", payload: user });
-          navigate("/rooms");
-        }
-      );
+    if (data.email !== "" && data.password !== "") {
+      if (data.password.length < 6) {
+        setError({
+          ...error,
+          state: true,
+          errorType: "Password Lenght Invalid",
+        });
+      } else if (
+        data.password !==
+        document.getElementById("icon_confirmPassword_prefix")?.value.toString()
+      ) {
+        setError({
+          ...error,
+          state: true,
+          errorType: "Password Don't Match",
+        });
+      } else {
+        createUserWithEmailAndPassword(auth, data.email, data.password).then(
+          (user) => {
+            dispatch({ type: "Login", payload: user });
+            navigate("/rooms");
+          }
+        );
+      }
     }
   };
 
   return (
     <>
-      {" "}
       <div className="container">
-        <h3>LoginScreen</h3>
+        <h4>Agregue sus datos para registrar usuario</h4>
         <hr />
         <div className="row container">
+          {error.state && error.component(error.errorType)}
           <form onSubmit={handleRegister} className="col s12">
             <div className="row">
               <div className="input-field col s12">

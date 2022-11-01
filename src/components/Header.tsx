@@ -1,3 +1,4 @@
+import { useEffect, useContext, memo } from "react";
 import {
   addDoc,
   collection,
@@ -6,34 +7,34 @@ import {
   getDocs,
   setDoc,
 } from "firebase/firestore";
-import { useContext } from "react";
-import logoTest from "../assets/vite.svg";
 import { authContext } from "../context/AuthProvider";
 import useFirebase from "../hooks/useFirebase";
-
-const TEST_ID = "newRom";
+import M from "materialize-css";
+import MemoSlider from "./Slider";
 
 const Header = () => {
-  const { db, auth, signInWithPopup, GoogleProvider } = useFirebase();
+  const { db, auth, signInWithPopup, GoogleProvider, signOut } = useFirebase();
   const { dispatch } = useContext(authContext);
 
   const handleClick = async (e: any) => {
     const myRef2 = collection(db, "rooms");
     const data = await getDocs(myRef2);
-    data.forEach((doc) => {
-      console.log(doc.data());
-    });
-    // const data = { roomName: 1, roomUserCreator: 2, roomDescription: 4 };
-
-    // await addDoc(myRef2, data);
   };
+
+  const handleLogout = (e: any) => {
+    signOut(auth).then(() => dispatch({ type: "Logout", payload: null }));
+  };
+
+  useEffect(() => {
+    M.AutoInit();
+  }, []);
 
   return (
     <>
-      <nav>
-        <div className="black nav-wrapper">
-          <a href="#" className="brand-logo">
-            Logo
+      <nav className="black">
+        <div style={{ margin: "0px 10px" }} className="nav-wrapper">
+          <a href="#" className="brand-logo center">
+            Rooms
           </a>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li>
@@ -43,11 +44,24 @@ const Header = () => {
               <a href="badges.html">Components</a>
             </li>
             <li>
-              <a href="collapsible.html">JavaScript</a>
+              <button className="btn red" onClick={handleLogout}>
+                Logout
+              </button>
             </li>
           </ul>
+          <span
+            style={{ cursor: "pointer" }}
+            data-target="slide-out"
+            className="sidenav-trigger"
+          >
+            <i className="material-icons">menu</i>
+            Menu
+          </span>
         </div>
       </nav>
+
+      {/* Slider  */}
+      <MemoSlider handler={handleLogout} />
     </>
   );
 };

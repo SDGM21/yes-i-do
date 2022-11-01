@@ -7,14 +7,13 @@ import useFirebase from "../hooks/useFirebase";
 const Room = () => {
   const { dispatch } = useContext(authContext);
   const { auth, signOut } = useFirebase();
-  const handleLogout = (e: any) => {
-    signOut(auth).then(() => dispatch({ type: "Logout", payload: null }));
-  };
+
   return (
     <>
       <Main>
-        <button onClick={handleLogout}>Logout</button>
-        <h1>Rooms</h1>
+        <div className="container">
+          <h1>Rooms</h1>
+        </div>
       </Main>
     </>
   );
