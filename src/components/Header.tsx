@@ -1,19 +1,12 @@
-import { useEffect, useContext, memo } from "react";
-import {
-  addDoc,
-  collection,
-  collectionGroup,
-  doc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { useEffect, useContext } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { authContext } from "../context/AuthProvider";
 import useFirebase from "../hooks/useFirebase";
 import M from "materialize-css";
 import MemoSlider from "./Slider";
 
 const Header = () => {
-  const { db, auth, signInWithPopup, GoogleProvider, signOut } = useFirebase();
+  const { db, auth, signOut } = useFirebase();
   const { dispatch } = useContext(authContext);
 
   const handleClick = async (e: any) => {

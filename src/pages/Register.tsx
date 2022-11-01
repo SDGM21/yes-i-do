@@ -47,7 +47,11 @@ const Register = () => {
         });
       } else if (
         data.password !==
-        document.getElementById("icon_confirmPassword_prefix")?.value.toString()
+        (
+          document.getElementById(
+            "icon_confirmPassword_prefix"
+          ) as HTMLInputElement
+        )?.value.toString()
       ) {
         setError({
           ...error,
