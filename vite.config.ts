@@ -10,4 +10,8 @@ export default defineConfig({
       "/api": "http://localhost:3001",
     },
   },
+
+  esbuild: {
+    // jsxInject: `import React from 'react'`,
+  },
 });

@@ -7,15 +7,22 @@ import { authReducer } from "./reducers/authReducer";
 import AuthProvider from "./context/AuthProvider";
 import PublicRoutes from "./routes/PublicRoutes";
 import PrivateRoutes from "./routes/PrivateRoutes";
+import M from "materialize-css";
 
 const App = () => {
   const { auth, onAuthStateChanged } = useFirebase();
 
-  const [state, dispatch] = useReducer(authReducer, null);
+  const [state, dispatch] = useReducer(authReducer, null, () => {
+    localStorage.getItem("");
+  });
 
   onAuthStateChanged(auth, (user) =>
     dispatch({ type: "Login", payload: user })
   );
+
+  useEffect(() => {
+    M.AutoInit();
+  }, []);
 
   return (
     <>
@@ -28,7 +35,12 @@ const App = () => {
             <Routes>
               <Route
                 path="/*"
-                element={state ? <PrivateRoutes /> : <PublicRoutes />}
+                element={
+                  <>
+                    <PrivateRoutes />
+                    <PublicRoutes />
+                  </>
+                }
               />
             </Routes>
             <Footer />

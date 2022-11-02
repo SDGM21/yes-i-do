@@ -1,7 +1,9 @@
 const Main = ({ children }: { children: any }) => {
   return (
     <>
-      <div className="valing-wrapper container">{children}</div>
+      <main style={{ flex: "1 0 auto" }} className="valing-wrapper container">
+        {children}
+      </main>
     </>
   );
 };

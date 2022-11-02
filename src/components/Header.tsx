@@ -1,8 +1,7 @@
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { authContext } from "../context/AuthProvider";
 import useFirebase from "../hooks/useFirebase";
-import M from "materialize-css";
 import MemoSlider from "./Slider";
 
 const Header = () => {
@@ -18,10 +17,6 @@ const Header = () => {
     signOut(auth).then(() => dispatch({ type: "Logout", payload: null }));
   };
 
-  useEffect(() => {
-    M.AutoInit();
-  }, []);
-
   return (
     <>
       <nav className="black">
@@ -35,11 +30,6 @@ const Header = () => {
             </li>
             <li>
               <a href="badges.html">Components</a>
-            </li>
-            <li>
-              <button className="btn red" onClick={handleLogout}>
-                Logout
-              </button>
             </li>
           </ul>
           <span
