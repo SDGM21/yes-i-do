@@ -8,6 +8,7 @@ import AuthProvider from "./context/AuthProvider";
 import PublicRoutes from "./routes/PublicRoutes";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import M from "materialize-css";
+import { browserSessionPersistence } from "firebase/auth";
 
 const App = () => {
   const { auth, onAuthStateChanged } = useFirebase();
@@ -21,6 +22,7 @@ const App = () => {
   );
 
   useEffect(() => {
+    auth.setPersistence(browserSessionPersistence);
     M.AutoInit();
   }, []);
 

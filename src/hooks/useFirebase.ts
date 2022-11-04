@@ -11,9 +11,16 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   GithubAuthProvider,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  addDoc,
+  doc,
+  collection,
+  collectionGroup,
+} from "firebase/firestore";
 
 //Config
 const firebaseConfig = {
@@ -50,6 +57,10 @@ const useFirebase = () => {
     signInWithEmailAndPassword,
     signOut,
     storage,
+    addDoc,
+    doc,
+    collection,
+    collectionGroup,
   };
 };
 

@@ -8,15 +8,11 @@ const LoginButton = ({
   provider,
   alt,
   cardTitle,
-  stateSetter,
-  isOpen,
 }: {
   logo?: string;
   provider?: any;
   alt?: string;
-  cardTitle?: string;
-  stateSetter?: any;
-  isOpen?: boolean;
+  cardTitle?: "Github" | "Google" | "Anonimo" | "Email";
 }) => {
   const { auth, signInWithPopup, signInAnonymously } = useFirebase();
   const { dispatch } = useContext(authContext);
@@ -32,10 +28,6 @@ const LoginButton = ({
       signInAnonymously(auth).then((user) => {
         dispatch({ type: "Login", payload: user });
       });
-    } else {
-      if (!isOpen) {
-        stateSetter(cardTitle);
-      }
     }
   };
 
@@ -45,7 +37,10 @@ const LoginButton = ({
         <div className="hoverable card">
           <div className="card-image">
             <button
-              className={`${isOpen && "disabled"}`}
+              className={`${
+                cardTitle !== "Email" ? "disabled" : "modal-trigger"
+              }`}
+              data-target={cardTitle === "Email" && "modal1"}
               onClick={handleClick}
               style={{
                 cursor: "pointer",

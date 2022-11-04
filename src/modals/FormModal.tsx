@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../context/AuthProvider";
 import useFirebase from "../hooks/useFirebase";
 
-export default function FormModal({ open, close }: { open: any; close: any }) {
+export default function FormModal() {
   const { dispatch } = useContext(authContext);
   const [state, setState] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
 
-  const { createUserWithEmailAndPassword, auth } = useFirebase();
+  const { auth, signInWithEmailAndPassword } = useFirebase();
 
   const handleChange = (e: any) => {
     const stringValue = e.target.value;
@@ -20,7 +20,7 @@ export default function FormModal({ open, close }: { open: any; close: any }) {
     e.preventDefault();
 
     if (state.email.includes("@") && state.password !== "") {
-      createUserWithEmailAndPassword(auth, state.email, state.password).then(
+      signInWithEmailAndPassword(auth, state.email, state.password).then(
         (user) => {
           dispatch({ type: "Login", payload: user });
           navigate("/rooms");
@@ -29,37 +29,15 @@ export default function FormModal({ open, close }: { open: any; close: any }) {
     }
   };
 
-  if (!open) {
-    return null;
-  } else {
-    return (
-      <>
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0,0,0,.7)",
-            zIndex: 1000,
-          }}
-          onClick={close}
-        />
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            backgroundColor: "#fff",
-            padding: "20px",
-            zIndex: 1000,
-          }}
-          className="row col s4"
-        >
+  return (
+    <>
+      <div id="modal1" className="modal">
+        <div className="modal-content row container">
           <div style={{ marginBottom: "10px" }}>
-            <button onClick={close} className="btn black">
+            <button
+              data-target="modal1"
+              className="modal-close waves-effect waves-green btn red"
+            >
               <i className="material-icons">arrow_back</i>
             </button>
           </div>
@@ -88,13 +66,17 @@ export default function FormModal({ open, close }: { open: any; close: any }) {
                   <label htmlFor="password">Password</label>
                 </div>
               </div>
+              <div className="center">
+                <button className="btn blue">Login</button>
+              </div>
             </form>
-            <div>
-              <Link to={"/register"}>Registrarse</Link>
-            </div>
+          </div>
+          <div className="modal-footer">
+            <span>No Account?, go to </span>
+            <Link to={"/register"}>Sing In</Link>
           </div>
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 }
