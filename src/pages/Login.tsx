@@ -4,26 +4,12 @@ import gitHubLogo from "../assets/211904_social_github_icon.svg";
 import googleLogo from "../assets/7123025_logo_google_g_icon.svg";
 import anonimLogo from "../assets/3994434_address_at_contact_email_icon.svg";
 import emailPassLogo from "../assets/9024815_password_light_icon.svg";
-import { memo, useEffect, useState } from "react";
+import { useEffect } from "react";
 import FormModal from "../modals/FormModal";
-import useFirebase from "../hooks/useFirebase";
+import { GithubProvider, GoogleProvider } from "../firebase/init";
 import M from "materialize-css";
 
 const Login = () => {
-  const modalElements = document.querySelectorAll(".modal");
-  const modalInstance = M.Modal.init(modalElements);
-
-  const { GithubProvider, GoogleProvider } = useFirebase();
-
-  const [open, setOpen] = useState(false);
-  const [state, setState] = useState<string>("");
-
-  useEffect(() => {
-    if (state === "Email") {
-      setOpen(true);
-    }
-  }, [state]);
-
   useEffect(() => {
     M.AutoInit();
   }, []);

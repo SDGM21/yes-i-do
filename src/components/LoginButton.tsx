@@ -1,8 +1,8 @@
 import { useContext, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { authContext } from "../context/AuthProvider";
-import useFirebase from "../hooks/useFirebase";
-
+import { auth } from "../firebase/init";
+import { signInAnonymously, signInWithPopup } from "firebase/auth";
 const LoginButton = ({
   logo,
   provider,
@@ -14,21 +14,21 @@ const LoginButton = ({
   alt?: string;
   cardTitle?: "Github" | "Google" | "Anonimo" | "Email";
 }) => {
-  const { auth, signInWithPopup, signInAnonymously } = useFirebase();
   const { dispatch } = useContext(authContext);
   const navigate = useNavigate();
 
   const handleClick = (e: any) => {
     if (cardTitle === "Github" || cardTitle === "Google") {
       signInWithPopup(auth, provider).then((user) => {
-        dispatch({ type: "Login", payload: user });
-        navigate("/rooms");
+        dispatch({ type: "Login", payload: user.user });
       });
     } else if (cardTitle === "Anonimo") {
       signInAnonymously(auth).then((user) => {
-        dispatch({ type: "Login", payload: user });
+        dispatch({ type: "Login", payload: user.user });
       });
     }
+
+    navigate("/rooms");
   };
 
   return (

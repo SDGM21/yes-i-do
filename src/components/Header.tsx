@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { authContext } from "../context/AuthProvider";
-import useFirebase from "../hooks/useFirebase";
+import { db, auth } from "../firebase/init";
 import MemoSlider from "./Slider";
+import { signOut } from "firebase/auth";
 
 const Header = () => {
-  const { db, auth, signOut } = useFirebase();
   const { dispatch } = useContext(authContext);
 
   const handleClick = async (e: any) => {

@@ -1,5 +1,7 @@
+import { UserCredential } from "firebase/auth";
+
 export const authReducer = (
-  state: any,
+  state: UserCredential | null,
   action: { type: "Login" | "Logout"; payload: any }
 ) => {
   switch (action.type) {

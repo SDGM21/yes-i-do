@@ -1,19 +1,22 @@
-import { createContext, Dispatch } from "react";
+import { User, UserCredential } from "firebase/auth";
+import { createContext, Dispatch, ReactNode } from "react";
 import { authContextType } from "../types/authContextType";
 
+export type AuthState = User | null;
+
 const authContext = createContext<{
-  state: any;
+  state: AuthState;
   dispatch: Dispatch<authContextType> | (() => {});
-}>({ state: null, dispatch: () => { } });
+}>({ state: null, dispatch: () => {} });
 
 const AuthProvider = ({
   state,
   dispatch,
   children,
 }: {
-  state: any;
+  state: AuthState;
   dispatch: Dispatch<{ type: "Login" | "Logout"; payload: any }>;
-  children?: any;
+  children?: ReactNode;
 }) => {
   return (
     <authContext.Provider value={{ state, dispatch }}>

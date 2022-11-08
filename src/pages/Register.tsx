@@ -1,9 +1,9 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Error from "../components/Error";
 import { authContext } from "../context/AuthProvider";
-import useFirebase from "../hooks/useFirebase";
-
+import { auth } from "../firebase/init";
 const Register = () => {
   const [data, setData] = useState({
     email: "",
@@ -20,8 +20,6 @@ const Register = () => {
 
   const { dispatch } = useContext(authContext);
   const navigate = useNavigate();
-  const { createUserWithEmailAndPassword, auth } = useFirebase();
-
   const handleChange = (e: any) => {
     let values: string = e.target.value;
 

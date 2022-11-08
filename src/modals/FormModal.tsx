@@ -1,15 +1,14 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../context/AuthProvider";
-import useFirebase from "../hooks/useFirebase";
+import { auth } from "../firebase/init";
 
 export default function FormModal() {
   const { dispatch } = useContext(authContext);
   const [state, setState] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
-
-  const { auth, signInWithEmailAndPassword } = useFirebase();
 
   const handleChange = (e: any) => {
     const stringValue = e.target.value;
