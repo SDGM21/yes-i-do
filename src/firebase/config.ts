@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-
+import { Chips, Datepicker, Timepicker } from "materialize-css";
 export const firebaseConfig = {
   apiKey: "AIzaSyDvK91OMFdNBWGSW8smxtqxs8mIzi0Y7gs",
   authDomain: "yes-i-do-5eef4.firebaseapp.com",
@@ -9,26 +9,42 @@ export const firebaseConfig = {
   appId: "1:575879530685:web:6eacd6d3b5bed30d924fd4",
 };
 
-export type RoomRequiredData = {
-  id?: string;
-  roomName: string;
-  roomCreator?: string | null;
-  roomShortD: string;
-  roomDescription: string;
-  roomImage?: string;
-  roomPrivacy: boolean;
-  roomStart?: Timestamp;
-  roomFinish?: Timestamp;
-  guests: string[];
+export type materialzeTimeDate = {
+  date: Date;
+  time: string;
+  pmOrAm: string;
 };
 
+export type RoomRequiredData = {
+  id?: string;
+  roomName?: string;
+  roomCreator?: string | null;
+  roomShortD: string | null;
+  roomDescription?: string;
+  roomImage: string | null;
+  roomPrivacy: boolean | null;
+  roomStart: Timestamp | materialzeTimeDate | null;
+  roomFinish: Timestamp | materialzeTimeDate | null;
+  guests: string[] | null;
+};
+
+export type RoomRequiredDataIndex = keyof RoomRequiredData;
+
+export type MaterialInstanceType = {
+  chipInstance: Chips | Chips[];
+  dateInstance: Datepicker | Datepicker[];
+  timeInstance: Timepicker | Timepicker[];
+};
+
+export type dataKeys = "guests" | "roomStart" | string;
+
 export const initRequiredRoomData: RoomRequiredData = {
-  roomName: "",
-  roomCreator: "",
-  roomShortD: "",
-  roomDescription: "",
-  roomPrivacy: false,
-  guests: [],
+  roomShortD: null,
+  roomPrivacy: null,
+  guests: null,
+  roomImage: null,
+  roomFinish: null,
+  roomStart: null,
 };
 
 export class FirebaseDate {

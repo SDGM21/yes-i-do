@@ -42,8 +42,8 @@ const RoomsList = () => {
               return (
                 <>
                   <li
-                    key={roomData.id}
-                    id={roomData.id}
+                    key={roomData.id ? "1" : "2"}
+                    id={roomData.id ? "0" : "1"}
                     className="collection-item avatar"
                   >
                     <RoomCard

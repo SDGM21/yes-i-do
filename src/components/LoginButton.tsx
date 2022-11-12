@@ -1,8 +1,9 @@
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { authContext } from "../context/AuthProvider";
 import { auth } from "../firebase/init";
 import { signInAnonymously, signInWithPopup } from "firebase/auth";
+import M from "materialize-css";
 const LoginButton = ({
   logo,
   provider,
@@ -27,9 +28,11 @@ const LoginButton = ({
         dispatch({ type: "Login", payload: user.user });
       });
     }
-
-    navigate("/rooms");
   };
+
+  useEffect(() => {
+    M.AutoInit();
+  }, []);
 
   return (
     <>

@@ -1,84 +1,68 @@
-import { Timestamp } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
 import {
-  FirebaseDate,
-  initRequiredRoomData,
-  RoomRequiredData,
-} from "../firebase/config";
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useTransition,
+} from "react";
+import { initRequiredRoomData, RoomRequiredData } from "../firebase/config";
 import M from "materialize-css";
-import { Room } from "../firebase/classes/Room";
 import { authContext } from "../context/AuthProvider";
-import setUserNewRoom from "../firebase/functions/setUserNewRoom";
+import createNewRoom from "../firebase/functions/createNewRoom";
+import { Timestamp } from "firebase/firestore";
 
 const NewRoom = () => {
   const { state } = useContext(authContext);
-
+  const [init, setInit] = useTransition();
   const [inputData, setInputData] = useState<RoomRequiredData>({
     ...initRequiredRoomData,
-    roomCreator: state ? state.email : "",
   });
 
-  const handleChange = (e: any) => {
-    setInputData({
-      ...inputData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [ref, setRef] = useState<any>(null);
+  const [instances, setInstances] = useState<{
+    dateInstance: M.Datepicker[];
+    timeInstance: M.Timepicker[];
+    chipInstance: M.Chips[];
+  } | null>(null);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const dateInstance = M.Datepicker.getInstance(
-      document.querySelector(".datepicker") as Element
-    );
-    const timeInstance = M.Timepicker.getInstance(
-      document.querySelector(".timepicker") as Element
-    );
-    const chipInstance = M.Chips.getInstance(
-      document.querySelector(".chips") as Element
-    );
+    setInit(() => {
+      setInputData({
+        ...inputData,
+        guests: M.Chips.getInstance(
+          document.querySelectorAll(".chips")[0] as Element
+        ).chipsData.map(({ tag }) => tag),
 
-    const firebaseTime = new FirebaseDate(
-      dateInstance.date,
-      timeInstance.time,
-      timeInstance.amOrPm
-    ).getFixedDate();
-
-    setInputData({
-      ...inputData,
-      guests: chipInstance.chipsData.map(({ tag }) => tag),
-      roomStart: Timestamp.fromDate(new Date()),
-      roomFinish: Timestamp.fromDate(firebaseTime),
+        roomStart: Timestamp.fromDate(new Date()),
+        roomFinish: Timestamp.fromDate(new Date()),
+        roomImage: "",
+      });
     });
 
-    const createdRoom = new Room(inputData);
-
-    setUserNewRoom;
+    createNewRoom({ ...inputData }).then((ref) => setRef(ref));
   };
 
-  function initChips() {
-    return M.Chips.init(document.querySelector(".chips") as Element, {
-      placeholder: "Guests Emails",
+  function handleChange(e: any) {
+    setInputData({
+      ...inputData,
+      [e.target.name]: e.target.value,
     });
-  }
-  function initTimePicker() {
-    return M.Timepicker.init(document.querySelector(".timepicker") as Element);
-  }
-
-  function initDatePicker() {
-    return M.Datepicker.init(document.querySelector(".datepicker") as Element);
   }
 
   useEffect(() => {
-    initTimePicker();
-    initChips();
-    initDatePicker();
-  }, []);
+    if (state) {
+      setInputData({ ...inputData, roomCreator: state.email });
+    }
+    M.AutoInit();
+  }, [state]);
 
   return (
     <>
       <div className="row container">
-        <form className="col s6">
+        <form className="col s12">
           <div className="row">
             <div className="input-field col s12">
               <input
@@ -112,38 +96,23 @@ const NewRoom = () => {
               <label htmlFor="textarea1">Room Long Description</label>
             </div>
 
-            {/* Fecha de Inicio y Finalizacion */}
-            <div className="row">
-              <div className="input-field col s6">
-                <input
-                  type="text"
-                  placeholder="Fecha de inicio"
-                  className="datepicker"
-                />
-              </div>
-              <div className="input-field col s6">
-                <input
-                  type="text"
-                  placeholder="Hora de inicio"
-                  className="timepicker"
-                />
-              </div>
-
-              {/* <div className="input-field col s6">
-                <input
-                  placeholder="Fecha de Finalización"
-                  type="text"
-                  className="datepicker"
-                />
-              </div>
-              <div className="input-field col s6">
-                <input
-                  placeholder="Hora de finalización"
-                  type="text"
-                  className="timepicker"
-                />
-              </div> */}
+            <div className="input-field col s6">
+              <input
+                type="text"
+                name="rSD"
+                placeholder="Fecha de inicio"
+                className="datepicker"
+              />
             </div>
+            <div className="input-field col s6">
+              <input
+                type="text"
+                name="rST"
+                placeholder="Hora de inicio"
+                className="timepicker"
+              />
+            </div>
+
             <div className="input-field col s12">
               <div className="chips chips-placeholder"></div>
             </div>
@@ -151,24 +120,40 @@ const NewRoom = () => {
             <div className="file-field input-field col s12">
               <div className="btn">
                 <span>File</span>
-                <input type="file" name="roomImage" onChange={handleChange} />
+                <input type="file" name="roomImage" placeholder="Room Photo" />
               </div>
               <div className="file-path-wrapper">
                 <input className="file-path validate" type="text" />
               </div>
             </div>
+
+            <div className="switch">
+              <label>
+                Public
+                <input
+                  type="checkbox"
+                  onClick={() =>
+                    setInputData({
+                      ...inputData,
+                      roomPrivacy: !inputData.roomPrivacy,
+                    })
+                  }
+                />
+                <span className="lever"></span>
+                Private
+              </label>
+            </div>
           </div>
           <div>
-            <button onClick={handleSubmit} type="submit" className="btn blue">
-              Crear+
+            <button
+              onClick={handleSubmit}
+              type={"submit"}
+              className={`${init ? "btn red" : "btn blue"}`}
+            >
+              {`${init ? "Creating..." : "Crear+"}`}
             </button>
           </div>
         </form>
-        <div className="col s6">
-          <div className="header container">
-            <h3>Data</h3>
-          </div>
-        </div>
       </div>
     </>
   );

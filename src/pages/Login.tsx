@@ -10,10 +10,6 @@ import { GithubProvider, GoogleProvider } from "../firebase/init";
 import M from "materialize-css";
 
 const Login = () => {
-  useEffect(() => {
-    M.AutoInit();
-  }, []);
-
   return (
     <Main>
       <div className="row container">

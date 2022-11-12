@@ -1,21 +1,53 @@
 import {
+  dataKeys,
+  FirebaseDate,
+  materialzeTimeDate,
+  RoomRequiredData,
+  RoomRequiredDataIndex,
+} from "./../config";
+import {
   DocumentData,
   DocumentSnapshot,
   SnapshotOptions,
+  Timestamp,
 } from "firebase/firestore";
-import { RoomRequiredData } from "../config";
+export class Room extends FirebaseDate {
+  constructor(private rData: RoomRequiredData | DocumentData) {
+    super(new Date(), "00:00", "PM");
+  }
 
-export class Room {
-  constructor(private roomData: RoomRequiredData | DocumentData) {}
+  public set setData(v: RoomRequiredData) {
+    this.rData = v;
+  }
 
-  public getRoomData() {
-    return this.roomData;
+  public get() {
+    return this.rData;
+  }
+
+  dataCheck(data?: RoomRequiredData): boolean {
+    const i: RoomRequiredDataIndex[] = Object.keys(
+      this.rData
+    ) as RoomRequiredDataIndex[];
+
+    for (let index = 0; index < i.length - 1; index++) {
+      if (data === undefined) {
+        if (this.rData[i[index]] === null) {
+          return false;
+        }
+      } else {
+        if (data[i[index]] === null) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 }
 
 export const roomConverter = {
   toFirestore: (room: Room) => {
-    return room.getRoomData();
+    return room.get();
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
     const data = snapshot.data(options);

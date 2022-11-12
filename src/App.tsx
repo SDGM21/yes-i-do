@@ -7,7 +7,6 @@ import { authReducer } from "./reducers/authReducer";
 import AuthProvider from "./context/AuthProvider";
 import PublicRoutes from "./routes/PublicRoutes";
 import PrivateRoutes from "./routes/PrivateRoutes";
-import M from "materialize-css";
 import { browserSessionPersistence, onAuthStateChanged } from "firebase/auth";
 
 const App = () => {
@@ -19,7 +18,6 @@ const App = () => {
 
   useEffect(() => {
     auth.setPersistence(browserSessionPersistence);
-    M.AutoInit();
   }, []);
 
   return (
